@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "dependencies": {
+    "@mendable/firecrawl-js": "^1.26.0",
+    "@types/node-fetch": "^2.6.12",
+    "node-fetch": "^3.3.2"
+  }
+}

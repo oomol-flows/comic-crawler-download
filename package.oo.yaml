@@ -1,0 +1,10 @@
+version: 0.0.1
+icon: ":twemoji:fire:currentColor:"
+scripts:
+  bootstrap: |
+    npm install
+    poetry install --no-root
+dependencies:
+  llm: 0.3.0
+  array: 0.1.0
+  manga-tools: 0.0.1

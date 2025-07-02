@@ -1,0 +1,23 @@
+ui:
+  default_width: 450
+inputs_def:
+  - handle: url
+    json_schema:
+      type: string
+  - handle: apikey
+    description: Input
+    json_schema:
+      contentMediaType: oomol/secret
+      type: string
+outputs_def:
+  - handle: markdown
+    description: Output
+    json_schema:
+      type: string
+executor:
+  name: nodejs
+  options:
+    entry: main.ts
+    spawn: false
+title: Page to MD
+icon: ":carbon:document:"

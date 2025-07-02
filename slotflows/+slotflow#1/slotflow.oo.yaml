@@ -1,0 +1,36 @@
+nodes:
+  - node_id: +python#2
+    title: "Python #2"
+    icon: ":logos:python:"
+    task:
+      ui:
+        default_width: 450
+      inputs_def:
+        - handle: item
+          json_schema:
+            {}
+        - handle: save_dir
+          json_schema:
+            type: string
+            ui:widget: dir
+          nullable: true
+      outputs_def:
+        - handle: item
+          json_schema:
+            {}
+          nullable: false
+      executor:
+        name: python
+        options:
+          entry: scriptlets/+scriptlet#1.py
+    inputs_from:
+      - handle: item
+        from_flow:
+          - input_handle: item
+      - handle: save_dir
+        value:
+outputs_from:
+  - handle: item
+    from_node:
+      - node_id: +python#2
+        output_handle: item

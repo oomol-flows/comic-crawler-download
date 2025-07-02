@@ -1,0 +1,129 @@
+nodes:
+  - node_id: page_to_md#1
+    task: self::page_to_md
+    inputs_from:
+      - handle: apikey
+        value: ${{OO_SECRET:Custom,firecrawl,apiKey}}
+      - handle: url
+  - node_id: llm#1
+    title: "LLM #1"
+    inputs_from:
+      - handle: timeout
+        value: 30
+      - handle: retry_times
+        value: 0
+      - handle: retry_sleep
+        value: 3.5
+      - handle: stream
+        value: true
+      - handle: model
+        value:
+          model: oomol-chat
+          temperature: 0
+          top_p: 0.5
+          max_tokens: 4096
+        from_node:
+          []
+      - handle: template
+        value:
+          - role: user
+            content: "阅读 markdown 文件 {{input}}，从中分析出漫画图片地址，并且页码按顺序排序。output 输出为一个地址数组"
+        schema_overrides:
+          - schema:
+              type: array
+      - handle: input
+        from_node:
+          - node_id: page_to_md#1
+            output_handle: markdown
+    task: llm::llm
+    inputs_def:
+      - handle: input
+        json_schema:
+          type: string
+    outputs_def:
+      - handle: output
+        description: write your answer here
+        json_schema:
+          type: array
+          items:
+            type: string
+      - handle: name
+        json_schema:
+          type: string
+  - node_id: map#1
+    title: "Map #1"
+    inputs_from:
+      - handle: array
+        from_node:
+          - node_id: llm#1
+            output_handle: output
+    subflow: array::map
+    slots:
+      - slot_node_id: +slot#2
+        slotflow: self::+slotflow#1
+  - node_id: archive#1
+    title: "Archive images #1"
+    inputs_from:
+      - handle: images
+        value:
+          []
+        from_node:
+          - node_id: map#1
+            output_handle: array
+      - handle: format
+        value: epub
+      - handle: pack_path
+        value: null
+        from_node:
+          - node_id: +python#1
+            output_handle: file_path
+      - handle: title
+        value: null
+      - handle: author
+        value: null
+      - handle: reading_order
+        value: to-right
+    task: manga-tools::archive
+  - node_id: +python#1
+    title: "Python #1"
+    icon: ":logos:python:"
+    task:
+      ui:
+        default_width: 450
+      inputs_def:
+        - handle: name
+          json_schema:
+            type: string
+        - handle: save_dir
+          json_schema:
+            type: string
+            ui:widget: dir
+      outputs_def:
+        - handle: file_path
+          json_schema:
+            type: string
+            ui:widget: save
+            ui:options:
+              excludeAll: true
+              filters:
+                - name: CBZ
+                  extensions:
+                    - cbz
+                - name: EPUB
+                  extensions:
+                    - epub
+                - name: PDF
+                  extensions:
+                    - pdf
+          nullable: true
+      executor:
+        name: python
+        options:
+          entry: scriptlets/+scriptlet#2.py
+    inputs_from:
+      - handle: name
+        from_node:
+          - node_id: llm#1
+            output_handle: name
+      - handle: save_dir
+        value: /oomol-driver/oomol-storage/new_book
