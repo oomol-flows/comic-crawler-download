@@ -5,7 +5,7 @@
       "rfNode": {
         "position": {
           "x": 481,
-          "y": 173
+          "y": 195
         }
       },
       "sections": {
@@ -35,7 +35,7 @@
       "rfNode": {
         "position": {
           "x": 2546,
-          "y": 418.25
+          "y": 321.25
         }
       }
     },
@@ -53,7 +53,7 @@
       "rfNode": {
         "position": {
           "x": 0,
-          "y": 519.75
+          "y": 422.75
         }
       }
     },
@@ -61,8 +61,13 @@
       "contentWidth": 450,
       "rfNode": {
         "position": {
-          "x": 1619.1401083440087,
-          "y": 634.402499626553
+          "x": 1514,
+          "y": 539.5
+        }
+      },
+      "sections": {
+        "scriptlet": {
+          "cardCollapsed": true
         }
       }
     }

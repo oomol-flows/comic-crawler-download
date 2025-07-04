@@ -105,13 +105,11 @@ nodes:
       - handle: url
         json_schema:
           type: string
-        value: https://www.twmanga.com/comic/chapter/yaoshenji-taxuedongman/0_0.html
         nullable: false
       - handle: save_dir
         json_schema:
           type: string
           ui:widget: dir
-        value: /oomol-driver/oomol-storage/new_book
         nullable: false
   - node_id: +python#2
     title: "File Path"
