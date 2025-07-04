@@ -14,3 +14,4 @@ displayName: "Comic Crawler Download"
 description: Comic Crawler Download，help users download comic pictures on web
   pages and synthesize epub e-books
 releaseNotes: init
+repository: https://github.com/oomol-flows/comic-crawler-download
