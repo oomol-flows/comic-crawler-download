@@ -23,39 +23,39 @@ def main(params: Inputs, context: Context) -> Outputs:
 
 def download_image(url, save_dir='images'):
     """
-    下载图片并保存为URL中的文件名
+    Downloads an image and saves it with the filename from the URL.
     
-    参数:
-        url (str): 图片的URL
-        save_dir (str): 保存目录，默认为当前目录下的images文件夹
+    Args:
+        url (str): The URL of the image.
+        save_dir (str): The directory to save the image, defaults to 'images' folder in the current directory.
     """
-    # 创建保存目录（如果不存在）
+    # Create the save directory if it doesn't exist
     os.makedirs(save_dir, exist_ok=True)
     
     try:
-        # 发送HTTP GET请求
+        # Send HTTP GET request
         response = requests.get(url, stream=True)
-        response.raise_for_status()  # 检查请求是否成功
+        response.raise_for_status()  # Check if the request was successful
         
-        # 从URL中提取文件名
+        # Extract filename from URL
         parsed_url = urlparse(url)
         filename = unquote(os.path.basename(parsed_url.path))
         
-        # 如果URL中没有文件名，使用默认名
+        # Use a default filename if no filename is present in the URL
         if not filename:
             filename = "downloaded_image.jpg"
         
-        # 构建保存路径
+        # Construct the save path
         save_path = os.path.join(save_dir, filename)
         
-        # 保存图片
+        # Save the image
         with open(save_path, 'wb') as f:
             for chunk in response.iter_content(chunk_size=8192):
                 f.write(chunk)
         
-        print(f"图片已保存至: {save_path}")
+        print(f"Image saved to: {save_path}")
         return save_path
     
     except Exception as e:
-        print(f"下载失败: {e}")
+        print(f"Download failed: {e}")
         return None

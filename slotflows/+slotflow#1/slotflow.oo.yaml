@@ -1,7 +1,7 @@
 nodes:
   - node_id: +python#2
-    title: "Python #2"
-    icon: ":logos:python:"
+    title: "Download Image"
+    icon: ":carbon:download:"
     task:
       ui:
         default_width: 450
