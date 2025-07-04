@@ -5,6 +5,9 @@ nodes:
       - handle: apikey
         value: ${{OO_SECRET:Custom,firecrawl,apiKey}}
       - handle: url
+        from_node:
+          - node_id: +value#1
+            output_handle: url
   - node_id: llm#1
     title: "LLM #1"
     inputs_from:
@@ -26,8 +29,10 @@ nodes:
           []
       - handle: template
         value:
-          - role: user
-            content: "阅读 markdown 文件 {{input}}，从中分析出漫画图片地址，并且页码按顺序排序。output 输出为一个地址数组"
+          - role: system
+            content: "Read the markdown file {{input}}, analyze the comic picture addresses
+              from it, and sort the page numbers in order. output output as an
+              address array"
         schema_overrides:
           - schema:
               type: array
@@ -68,15 +73,15 @@ nodes:
         value:
           []
         from_node:
-          - node_id: map#1
-            output_handle: array
+          - node_id: filter_files#1
+            output_handle: files
       - handle: format
         value: epub
       - handle: pack_path
         value: null
         from_node:
-          - node_id: +python#1
-            output_handle: file_path
+          - node_id: +python#2
+            output_handle: pack_path
       - handle: title
         value: null
       - handle: author
@@ -84,9 +89,33 @@ nodes:
       - handle: reading_order
         value: to-right
     task: manga-tools::archive
-  - node_id: +python#1
-    title: "Python #1"
-    icon: ":logos:python:"
+  - node_id: filter_files#1
+    title: "Filter Files #1"
+    inputs_from:
+      - handle: files
+        from_node:
+          - node_id: map#1
+            output_handle: array
+      - handle: type
+        value: image
+    task: oomol-file::filter_files
+  - node_id: +value#1
+    title: "Value #1"
+    values:
+      - handle: url
+        json_schema:
+          type: string
+        value: https://www.twmanga.com/comic/chapter/yaoshenji-taxuedongman/0_0.html
+        nullable: false
+      - handle: save_dir
+        json_schema:
+          type: string
+          ui:widget: dir
+        value: /oomol-driver/oomol-storage/new_book
+        nullable: false
+  - node_id: +python#2
+    title: "File Path"
+    icon: ":carbon:file-storage:"
     task:
       ui:
         default_width: 450
@@ -94,12 +123,14 @@ nodes:
         - handle: name
           json_schema:
             type: string
+          nullable: false
         - handle: save_dir
           json_schema:
             type: string
             ui:widget: dir
+          nullable: false
       outputs_def:
-        - handle: file_path
+        - handle: pack_path
           json_schema:
             type: string
             ui:widget: save
@@ -119,11 +150,14 @@ nodes:
       executor:
         name: python
         options:
-          entry: scriptlets/+scriptlet#2.py
+          entry: scriptlets/+scriptlet#3.py
     inputs_from:
       - handle: name
         from_node:
           - node_id: llm#1
             output_handle: name
       - handle: save_dir
-        value: /oomol-driver/oomol-storage/new_book
+        from_node:
+          - node_id: +value#1
+            output_handle: save_dir
+description: 输入一个漫画的网页地址，就帮你下载此页面中的漫画图片，并且生成一个 epub 格式漫画电子书在本地
