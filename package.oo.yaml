@@ -11,4 +11,6 @@ dependencies:
   oomol-file: 0.0.13
 name: comic-crawler-download
 displayName: "Comic Crawler Download"
-description: Comic Crawler Download
+description: Comic Crawler Download，help users download comic pictures on web
+  pages and synthesize epub e-books
+releaseNotes: init
