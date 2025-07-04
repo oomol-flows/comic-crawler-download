@@ -71,5 +71,18 @@
         }
       }
     }
+  },
+  "commentNodes": {
+    "+comment-1751606868799": {
+      "contentWidth": 350,
+      "rfNode": {
+        "position": {
+          "x": 552.4305191080911,
+          "y": 471.75
+        }
+      },
+      "title": "Fire Crawl",
+      "content": "## Get crawler service key\n\nwebsite: https://www.firecrawl.dev/"
+    }
   }
 }

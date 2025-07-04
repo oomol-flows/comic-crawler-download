@@ -1,5 +1,5 @@
 version: 0.0.1
-icon: ":twemoji:fire:currentColor:"
+icon: ./icon.png
 scripts:
   bootstrap: |
     npm install
@@ -9,5 +9,6 @@ dependencies:
   array: 0.1.1
   manga-tools: 0.0.1
   oomol-file: 0.0.13
-name: firecrawl_flow
-displayName: ""
+name: comic-crawler-download
+displayName: "Comic Crawler Download"
+description: Comic Crawler Download
