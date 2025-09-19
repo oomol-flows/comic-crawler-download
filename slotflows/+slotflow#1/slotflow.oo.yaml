@@ -7,15 +7,18 @@ nodes:
         default_width: 450
       inputs_def:
         - handle: item
+          description: "Image URL to download"
           json_schema:
             {}
         - handle: save_dir
+          description: "Directory path where the downloaded image will be saved"
           json_schema:
             type: string
             ui:widget: dir
           nullable: true
       outputs_def:
         - handle: item
+          description: "File path of the downloaded image"
           json_schema:
             {}
           nullable: false
@@ -23,6 +26,10 @@ nodes:
         name: python
         options:
           entry: scriptlets/+scriptlet#1.py
+      title: "Download Image"
+      description: "Downloads an image from a URL and saves it to the specified
+        directory. If no directory is specified, saves to the session
+        directory."
     inputs_from:
       - handle: item
         from_flow:

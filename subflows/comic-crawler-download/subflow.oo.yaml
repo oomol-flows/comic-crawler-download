@@ -90,18 +90,6 @@ nodes:
       - handle: type
         value: image
     task: oomol-file::filter_files
-  - node_id: +value#1
-    title: "Value #1"
-    values:
-      - handle: url
-        json_schema:
-          type: string
-        nullable: false
-      - handle: save_dir
-        json_schema:
-          type: string
-          ui:widget: dir
-        nullable: false
   - node_id: +python#2
     title: File Path
     icon: ":carbon:file-storage:"
@@ -146,16 +134,18 @@ nodes:
           - node_id: llm#2
             output_handle: name
       - handle: save_dir
+        from_flow:
+          - input_handle: save_dir
         from_node:
-          - node_id: +value#1
-            output_handle: save_dir
+          []
   - node_id: crawler#1
     title: "Crawler #1"
     inputs_from:
       - handle: url
+        from_flow:
+          - input_handle: url
         from_node:
-          - node_id: +value#1
-            output_handle: url
+          []
     task: web-crawler::crawler
   - node_id: llm#2
     title: "LLM #2"
@@ -202,3 +192,44 @@ nodes:
           type: string
         nullable: false
 description: 输入一个漫画的网页地址，就帮你下载此页面中的漫画图片，并且生成一个 epub 格式漫画电子书在本地
+inputs_def:
+  - handle: url
+    json_schema:
+      type: string
+      nullable: true
+    nullable: false
+    description: 要搜索的网页 URL
+    executor_name: nodejs
+  - handle: save_dir
+    json_schema:
+      type: string
+      ui:widget: dir
+    nullable: false
+    executor_name: python
+outputs_def:
+  - handle: archive_path
+    json_schema:
+      type: string
+      ui:widget: save
+      ui:options:
+        excludeAll: true
+        filters:
+          - name: CBZ
+            extensions:
+              - cbz
+          - name: CBR
+            extensions:
+              - cbr
+          - name: EPUB
+            extensions:
+              - epub
+          - name: PDF
+            extensions:
+              - pdf
+    nullable: false
+    executor_name: python
+outputs_from:
+  - handle: archive_path
+    from_node:
+      - node_id: archive#1
+        output_handle: archive_path
