@@ -6,10 +6,10 @@ from urllib.parse import unquote, urlparse
 #region generated meta
 import typing
 class Inputs(typing.TypedDict):
-    item: typing.Any
+    item: str
     save_dir: str | None
 class Outputs(typing.TypedDict):
-    item: typing.Any
+    item: str
 #endregion
 
 def main(params: Inputs, context: Context) -> Outputs:

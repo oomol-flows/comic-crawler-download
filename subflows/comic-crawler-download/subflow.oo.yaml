@@ -37,11 +37,12 @@ nodes:
     task: llm::llm
     inputs_def:
       - handle: input
+        description: "Markdown content containing comic page information to analyze"
         json_schema:
           type: string
     outputs_def:
       - handle: output
-        description: write your answer here
+        description: "Array of sorted comic image URLs extracted from the markdown content"
         json_schema:
           type: array
           items:
@@ -98,16 +99,19 @@ nodes:
         default_width: 450
       inputs_def:
         - handle: name
+          description: "Comic name for generating the output file name"
           json_schema:
             type: string
           nullable: false
         - handle: save_dir
+          description: "Directory where the comic archive file will be saved"
           json_schema:
             type: string
             ui:widget: dir
           nullable: false
       outputs_def:
         - handle: pack_path
+          description: "Full path to the generated comic archive file (CBZ, EPUB, or PDF)"
           json_schema:
             type: string
             ui:widget: save
@@ -184,23 +188,27 @@ nodes:
     task: llm::llm
     inputs_def:
       - handle: input
+        description: "Website content to extract comic name from"
         json_schema:
           type: string
     outputs_def:
       - handle: name
+        description: "Generated plain text name for the comic without special characters"
         json_schema:
           type: string
         nullable: false
-description: 输入一个漫画的网页地址，就帮你下载此页面中的漫画图片，并且生成一个 epub 格式漫画电子书在本地
+description: "Input a comic website URL to download comic images from the page
+  and generate an EPUB format comic e-book locally"
 inputs_def:
   - handle: url
     json_schema:
       type: string
       nullable: true
     nullable: false
-    description: 要搜索的网页 URL
+    description: "Comic website URL to search and download from"
     executor_name: nodejs
   - handle: save_dir
+    description: "Directory where the downloaded comic archive will be saved"
     json_schema:
       type: string
       ui:widget: dir
@@ -208,6 +216,7 @@ inputs_def:
     executor_name: python
 outputs_def:
   - handle: archive_path
+    description: "Path to the generated comic archive file (CBZ, CBR, EPUB, or PDF)"
     json_schema:
       type: string
       ui:widget: save
@@ -233,3 +242,4 @@ outputs_from:
     from_node:
       - node_id: archive#1
         output_handle: archive_path
+title: comic-crawler-download

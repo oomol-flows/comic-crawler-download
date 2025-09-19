@@ -7,20 +7,20 @@ nodes:
         default_width: 450
       inputs_def:
         - handle: item
-          description: "Image URL to download"
+          description: "Image URL to download from the web"
           json_schema:
-            {}
+            type: string
         - handle: save_dir
-          description: "Directory path where the downloaded image will be saved"
+          description: "Target directory path where the downloaded image will be saved"
           json_schema:
             type: string
             ui:widget: dir
           nullable: true
       outputs_def:
         - handle: item
-          description: "File path of the downloaded image"
+          description: "Local file path of the successfully downloaded image"
           json_schema:
-            {}
+            type: string
           nullable: false
       executor:
         name: python
