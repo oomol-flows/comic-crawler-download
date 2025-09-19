@@ -1,0 +1,20 @@
+[project]
+name = "firecrawl-flow"
+version = "0.1.0"
+description = ""
+authors = []
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+dependencies = [ "requests (>=2.32.4,<3.0.0)", "crawl4ai (>=0.6.3,<0.7.0)" ]
+
+[tool]
+[tool.poetry]
+package-mode = false
+
+[[tool.poetry.packages]]
+include = "firecrawl_flow"
+from = "src"
+
+[build-system]
+requires = [ "poetry-core>=2.0.0,<3.0.0" ]
+build-backend = "poetry.core.masonry.api"

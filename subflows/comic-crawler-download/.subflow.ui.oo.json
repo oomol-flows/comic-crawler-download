@@ -1,0 +1,98 @@
+{
+  "nodes": {
+    "llm#1": {
+      "contentWidth": 350,
+      "rfNode": {
+        "position": {
+          "x": 1028,
+          "y": 0
+        }
+      }
+    },
+    "map#1": {
+      "rfNode": {
+        "position": {
+          "x": 1529,
+          "y": 145.5
+        }
+      }
+    },
+    "archive#1": {
+      "contentWidth": 350,
+      "rfNode": {
+        "position": {
+          "x": 2546,
+          "y": 321.25
+        }
+      }
+    },
+    "filter_files#1": {
+      "contentWidth": 450,
+      "rfNode": {
+        "position": {
+          "x": 2030,
+          "y": 185
+        }
+      }
+    },
+    "+value#1": {
+      "contentWidth": 415,
+      "rfNode": {
+        "position": {
+          "x": 0,
+          "y": 422.75
+        }
+      }
+    },
+    "+python#2": {
+      "contentWidth": 450,
+      "rfNode": {
+        "position": {
+          "x": 1514,
+          "y": 539.5
+        }
+      },
+      "sections": {
+        "scriptlet": {
+          "cardCollapsed": true
+        }
+      }
+    },
+    "crawler#1": {
+      "contentWidth": 350,
+      "rfNode": {
+        "position": {
+          "x": 474.70060971809517,
+          "y": 16.359775572853295
+        }
+      }
+    },
+    "llm#2": {
+      "contentWidth": 350,
+      "rfNode": {
+        "position": {
+          "x": 840.7006097180952,
+          "y": 499.99894760802397
+        }
+      }
+    }
+  },
+  "pseudoNodes": {
+    "input": {
+      "rfNode": {
+        "position": {
+          "x": 0,
+          "y": -100
+        }
+      }
+    },
+    "output": {
+      "rfNode": {
+        "position": {
+          "x": 1000,
+          "y": -100
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,204 @@
+nodes:
+  - node_id: llm#1
+    title: "LLM #1"
+    inputs_from:
+      - handle: timeout
+        value: 30
+      - handle: retry_times
+        value: 0
+      - handle: retry_sleep
+        value: 3.5
+      - handle: stream
+        value: true
+      - handle: model
+        value:
+          model: deepseek-chat
+          temperature: 0
+          top_p: 0.5
+          max_tokens: 4096
+        from_node:
+          []
+      - handle: template
+        value:
+          - role: system
+            content: Read the markdown file {{input}}, analyze the comic picture addresses
+              from it, and sort the page numbers in order. output output as an
+              address array
+        schema_overrides:
+          - schema:
+              type: array
+        from_node:
+          []
+      - handle: input
+        value: ""
+        from_node:
+          - node_id: crawler#1
+            output_handle: content
+    task: llm::llm
+    inputs_def:
+      - handle: input
+        json_schema:
+          type: string
+    outputs_def:
+      - handle: output
+        description: write your answer here
+        json_schema:
+          type: array
+          items:
+            type: string
+  - node_id: map#1
+    title: "Map #1"
+    inputs_from:
+      - handle: array
+        from_node:
+          - node_id: llm#1
+            output_handle: output
+    subflow: array::map
+    slots:
+      - slot_node_id: +slot#2
+        slotflow: self::+slotflow#1
+  - node_id: archive#1
+    title: "Archive images #1"
+    inputs_from:
+      - handle: images
+        value:
+          []
+        from_node:
+          - node_id: filter_files#1
+            output_handle: files
+      - handle: format
+        value: epub
+      - handle: title
+        value: null
+      - handle: author
+        value: null
+      - handle: reading_order
+        value: to-right
+      - handle: archive_path
+        value:
+        from_node:
+          - node_id: +python#2
+            output_handle: pack_path
+    task: manga-tools::archive
+  - node_id: filter_files#1
+    title: "Filter Files #1"
+    inputs_from:
+      - handle: files
+        from_node:
+          - node_id: map#1
+            output_handle: array
+      - handle: type
+        value: image
+    task: oomol-file::filter_files
+  - node_id: +value#1
+    title: "Value #1"
+    values:
+      - handle: url
+        json_schema:
+          type: string
+        nullable: false
+      - handle: save_dir
+        json_schema:
+          type: string
+          ui:widget: dir
+        nullable: false
+  - node_id: +python#2
+    title: File Path
+    icon: ":carbon:file-storage:"
+    task:
+      ui:
+        default_width: 450
+      inputs_def:
+        - handle: name
+          json_schema:
+            type: string
+          nullable: false
+        - handle: save_dir
+          json_schema:
+            type: string
+            ui:widget: dir
+          nullable: false
+      outputs_def:
+        - handle: pack_path
+          json_schema:
+            type: string
+            ui:widget: save
+            ui:options:
+              excludeAll: true
+              filters:
+                - name: CBZ
+                  extensions:
+                    - cbz
+                - name: EPUB
+                  extensions:
+                    - epub
+                - name: PDF
+                  extensions:
+                    - pdf
+          nullable: true
+      executor:
+        name: python
+        options:
+          entry: scriptlets/+scriptlet#3.py
+    inputs_from:
+      - handle: name
+        from_node:
+          - node_id: llm#2
+            output_handle: name
+      - handle: save_dir
+        from_node:
+          - node_id: +value#1
+            output_handle: save_dir
+  - node_id: crawler#1
+    title: "Crawler #1"
+    inputs_from:
+      - handle: url
+        from_node:
+          - node_id: +value#1
+            output_handle: url
+    task: web-crawler::crawler
+  - node_id: llm#2
+    title: "LLM #2"
+    inputs_from:
+      - handle: timeout
+        value: 30
+      - handle: retry_times
+        value: 0
+      - handle: retry_sleep
+        value: 3.5
+      - handle: stream
+        value: true
+      - handle: model
+        value:
+          model: deepseek-chat
+          temperature: 0
+          top_p: 0.5
+          max_tokens: 4096
+        from_node:
+          []
+      - handle: template
+        value:
+          - role: system
+            content: Read {{input}}generates a plain text name based on the content, and
+              characters and spaces must not be used.
+        schema_overrides:
+          - schema:
+              type: array
+        from_node:
+          []
+      - handle: input
+        value: ""
+        from_node:
+          - node_id: crawler#1
+            output_handle: content
+    task: llm::llm
+    inputs_def:
+      - handle: input
+        json_schema:
+          type: string
+    outputs_def:
+      - handle: name
+        json_schema:
+          type: string
+        nullable: false
+description: 输入一个漫画的网页地址，就帮你下载此页面中的漫画图片，并且生成一个 epub 格式漫画电子书在本地

@@ -1,0 +1,12 @@
+version: 0.0.1
+icon: https://package-assets.oomol.com/packages/comic-crawler-download/0.0.1/files/package/icon.png
+scripts:
+  bootstrap: |
+    npm install
+    poetry install --no-root
+dependencies:
+  llm: 0.3.1
+  array: 0.1.1
+  manga-tools: 0.0.7
+  oomol-file: 0.0.13
+  web-crawler: 0.0.4
