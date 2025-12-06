@@ -9,7 +9,7 @@ class Inputs(typing.TypedDict):
     item: str
     save_dir: str | None
 class Outputs(typing.TypedDict):
-    item: str
+    item: typing.NotRequired[str]
 #endregion
 
 def main(params: Inputs, context: Context) -> Outputs:

@@ -7,7 +7,7 @@ class Inputs(typing.TypedDict):
     name: str
     save_dir: str
 class Outputs(typing.TypedDict):
-    pack_path: str | None
+    pack_path: typing.NotRequired[str | None]
 #endregion
 
 def main(params: Inputs, context: Context) -> Outputs:
